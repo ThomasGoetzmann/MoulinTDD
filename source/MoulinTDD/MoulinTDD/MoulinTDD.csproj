@@ -40,8 +40,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\InvalidPawnOwnerException.cs" />
+    <Compile Include="Game.cs" />
+    <Compile Include="IPlayer.cs" />
     <Compile Include="Pawn.cs" />
-    <Compile Include="PawnColor.cs" />
+    <Compile Include="Color.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
