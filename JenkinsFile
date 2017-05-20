@@ -1,0 +1,37 @@
+#!groovy​
+
+stage 'Checkout'
+node{
+    echo 'Checkout from Github'
+    checkout([
+        $class: 'GitSCM',
+        branches: [[name: '*/master']],
+        browser: [$class: 'GithubWeb',
+        repoUrl: 'https://github.com/ThomasGoetzmann/MoulinTDD'],
+        doGenerateSubmoduleConfigurations: false,
+        extensions: [],
+        submoduleCfg: [],
+        userRemoteConfigs: [[credentialsId: '65013d95-bfd9-4de0-a0eb-9750aa816e43',
+        name: 'MoulinTDD',
+        url: 'https://github.com/ThomasGoetzmann/MoulinTDD']]])
+}
+
+stage 'Build'
+node{
+    echo 'Restore Nuget package'
+    bat '"C:\\Program Files (x86)\\NuGet\\nuget.exe" restore ".\\source\\MoulinTDD\\MoulinTDD.sln"'
+    
+    echo 'Build with MSBuild v15.0'
+    bat '"C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\MSBuild\\15.0\\Bin\\MSBuild.exe" ".\\source\\MoulinTDD\\MoulinTDD.sln"'   
+}
+
+stage 'Stash outputs'
+node{
+    stash name: 'moulintdd-outputs', includes: '.\\source\\MoulinTDD\\MoulinTDD\\bin\\Debug\\**'
+    stash name: 'moulintdd-unittests', includes: '.\\source\\MoulinTDD\\MoulinTDD-UnitTests\\bin\\Debug\\**'
+}
+
+state 'UnitTesting'
+node{
+
+}
