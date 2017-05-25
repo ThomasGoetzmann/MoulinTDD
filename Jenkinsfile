@@ -40,11 +40,10 @@ stage ('Test'){
     }
 }
 
-timeout(time:10, unit:'DAYS'){
-    input message:'Archive binaries and test results ?', ok:'Archive'
-}
-
 stage ('Archive'){
+    timeout(time:10, unit:'DAYS'){
+        input message:'Archive binaries and test results ?', ok:'Archive'
+    }
     node{
         unstash 'moulintdd_outputs'
         archiveArtifacts artifacts: 'source/MoulinTDD/MoulinTDD/bin/**'
