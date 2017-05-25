@@ -1,26 +1,24 @@
-﻿using NUnit.Framework;
+﻿using FakeItEasy;
 using MoulinTDD;
-using FakeItEasy;
 using MoulinTDD.Exceptions;
 using NFluent;
-using System;
+using Xunit;
 
 namespace MoulinTDD_UnitTests
 {
-    [TestFixture]
     public class PawnUnitTests
     {
-        [Test]
-        [TestCase(Color.Black, ExpectedResult = Color.Black)]
-        [TestCase(Color.White, ExpectedResult = Color.White)]
-        public Color Pawn_HasValidColor(Color color)
+        [Theory]
+        [InlineData(Color.Black, Color.Black)]
+        [InlineData(Color.White, Color.White)]
+        public void Pawn_HasValidColor(Color color, Color expectedResult)
         {
             var pawn = new Pawn(color);
 
-            return pawn.Color;
+            Check.That(pawn.Color).Equals(expectedResult);
         }
 
-        [Test]
+        [Fact]
         public void Owner_NotSetYet_Throws()
         {
             var pawn = new Pawn();
@@ -28,7 +26,7 @@ namespace MoulinTDD_UnitTests
             Check.ThatCode(() => pawn.Owner).Throws<InvalidPawnOwnerException>();
         }
 
-        [Test]
+        [Fact]
         public void Owner_SetWhitePlayerForBlackPawn_Throws()
         {
             //Arrange

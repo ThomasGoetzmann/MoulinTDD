@@ -1,16 +1,15 @@
 ﻿using FakeItEasy;
 using MoulinTDD;
 using NFluent;
-using NUnit.Framework;
-using System;
 using System.Linq;
+using Xunit;
 
 namespace MoulinTDD_UnitTests
 {
-    [TestFixture]
+
     public class GameUnitTests
     {
-        [Test]
+        [Fact]
         public void Game_Has9WhitePawns()
         {
             var game = new Game();
@@ -20,7 +19,7 @@ namespace MoulinTDD_UnitTests
             Check.That(whitePawnsAmount).IsEqualTo(9);
         }
 
-        [Test]
+        [Fact]
         public void Game_Has9BlackPawns()
         {
             var game = new Game();
@@ -30,7 +29,7 @@ namespace MoulinTDD_UnitTests
             Check.That(blackPawnsAmount).IsEqualTo(9);
         }
 
-        [Test]
+        [Fact]
         public void Game_Has2Players()
         {
             var game = new Game();

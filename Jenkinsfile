@@ -15,17 +15,20 @@ stage ('Build'){
         def msbuild = tool 'msbuild v15.0'
         bat "\"${msbuild}\" \".\\source\\MoulinTDD\\MoulinTDD.sln\""   
 
-        stash name: 'moulintdd-outputs', includes: 'source/MoulinTDD/MoulinTDD/bin/Debug/**'
+        stash name: 'moulintdd_outputs', includes: 'source/MoulinTDD/MoulinTDD/bin/Debug/**, /source/MoulinTDD/MoulinTDD-UnitTests/bin/Debug/**'
         echo 'Binaries stashed'
-
-        stash name: 'moulintdd-unittests', includes: '/source/MoulinTDD/MoulinTDD-UnitTests/bin/Debug/**'
-        echo 'Tests stashed'
     }
 }
 
-state ('Test'){
-    node{
-        stage('Unit Tests'){
+stage ('Test'){
+    parallel 'Unit Tests': {
+        node{
+            unstash 'moulintdd_outputs'
+            def vstest = tool 'vstest 15.0'
+            bat "\"${vstest }\" \".\\source\\MoulinTDD\\MoulinTDD-UnitTests\\bin\\Debug\\MoulinTDD-UnitTests.dll\" "
+        }
+    }, 'Other Tests': {
+        node{
 
         }
     }
